@@ -2,7 +2,7 @@
 
 Simple Backend code first project.
 
-Design and Develop a QA app utilizing C#, M.V.C, CSHTML, Boostrap. 
+Design and Develop a QA app utilizing C#, M.V.C, CSS, HTML, Boostrap. 
 
 - User can create Question and make Comment
 - Only login User can Upvote or DownVote a Question or Comment
