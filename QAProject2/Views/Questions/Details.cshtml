@@ -1,0 +1,166 @@
+﻿@model QAProject2.Models.Answer
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<header>
+    <h2>@Html.DisplayFor(model => model.Question.Title)</h2>
+</header>
+<body>
+    <div>
+        @using (Html.BeginForm())
+        {
+        <div class="media-left">
+            <a href="@Url.Action("UpVoteQuestion","Questions", new { questionId = Model.Question.Id })">
+                <i class="glyphicon glyphicon-chevron-up" style="color:cornflowerblue"></i><br />
+            </a>
+            @Html.DisplayFor(model => model.Question.Vote)<br />
+            <a href="@Url.Action("DownVoteQuestion","Questions", new { questionId = Model.Question.Id })">
+                <i class="glyphicon glyphicon-chevron-down" style="color:cornflowerblue"></i><br />
+            </a>
+        </div>
+        <div class="media-right">
+            <p>@Html.DisplayFor(model => model.Question.Description)</p>
+            <ul class="row list-unstyled list-inline">
+                @foreach (var tag in Model.Question.Tags)
+                {
+                    <li>@Html.ActionLink(tag.Name, "Index", new { tagId = tag.Id })</li>
+                }
+            </ul>
+            @Html.DisplayFor(model => model.Date)<br />
+            By: @Html.DisplayFor(model => model.Question.ApplicationUser.Email) 
+            @if (Model.Question.ApplicationUser.Reputation >= 100)
+            {
+                <i class="glyphicon glyphicon-star" style="color:gold"></i>
+                @Html.DisplayFor(modelItem => Model.Question.ApplicationUser.Reputation)
+            }
+            @if (Model.Question.ApplicationUser.Reputation < 100)
+            {
+                @Html.DisplayFor(modelItem => Model.Question.ApplicationUser.Reputation)
+            }
+            <ul class="list-unstyled">
+                @foreach (var com in Model.Question.Comments)
+                {
+                    <li>
+                        @com.Content<br />
+                        @com.Date <br />
+                        By: @com.ApplicationUser.Email Rep:
+                        @if (com.ApplicationUser.Reputation >= 100)
+                        {
+                            <i class="glyphicon glyphicon-star" style="color:gold"></i>
+                            @Html.DisplayFor(modelItem => com.ApplicationUser.Reputation)
+                        }
+                        @if (com.ApplicationUser.Reputation < 100)
+                        {
+                            @Html.DisplayFor(modelItem => com.ApplicationUser.Reputation)
+                        }
+                    </li>
+                }
+            </ul>
+            <a href="@Url.Action("AddTag","Questions",new { id = Model.QuestionId })">Add a Tag</a>
+            <a href="@Url.Action("Create","Comments",new { questionId = Model.QuestionId })">Make a Comment</a>
+        </div>
+        }
+
+    </div>
+    @if (Model.Question.Answers.Count > 1)
+    {
+        <h2>@Model.Question.Answers.Count Answers</h2>
+    }
+    @if (Model.Question.Answers.Count <= 1)
+    {
+        <h2>@Model.Question.Answers.Count Answer</h2>
+    }
+    @using (Html.BeginForm())
+    {
+        <ul class="list-unstyled">
+            @foreach (var x in Model.Question.Answers)
+            {
+                <li>
+                    <div>
+                        <div class="media-left">
+                            <a href="@Url.Action("UpVoteAnswer","Questions", new { answerId = x.Id })">
+                                <i class="glyphicon glyphicon-chevron-up" style="color:cornflowerblue"></i><br />
+                            </a>
+                            @x.Vote<br />
+                            <a href="@Url.Action("DownVoteAnswer","Questions", new { answerId = x.Id })">
+                                <i class="glyphicon glyphicon-chevron-down" style="color:cornflowerblue"></i><br />
+                            </a>
+                            <a href="@Url.Action("CheckAnswer","Questions", new { answerId = x.Id})">
+                                @if (x.Mark == true)
+                                {
+                                    <i class="glyphicon glyphicon-ok" style="color:deepskyblue"></i>
+                                }
+                                @if (x.Mark == false)
+                                {
+                                    <i class="glyphicon glyphicon-ok" style="color:dimgrey"></i>
+                                }
+                            </a>
+                        </div>
+                        <div class="media-right">
+                            @Html.Raw(x.Content)<br />
+                            @Html.DisplayFor(model => x.Date)<br />
+                            By: @Html.DisplayFor(model => x.ApplicationUser.Email)
+                            @if (x.ApplicationUser.Reputation >= 100)
+                            {
+                                <i class="glyphicon glyphicon-star" style="color:gold"></i>
+                                @Html.DisplayFor(modelItem => x.ApplicationUser.Reputation)
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(modelItem => x.ApplicationUser.Reputation)
+                            }
+                            <ul>
+                                @foreach (var com in x.Comments)
+                                {
+                                    <li>
+                                        @com.Content<br />
+                                        @com.Date <br />
+                                        @com.ApplicationUser.Name Rep:
+                                        @if (com.ApplicationUser.Reputation >= 100)
+                                        {
+                                            <i class="glyphicon glyphicon-star" style="color:gold"></i>
+                                            @Html.DisplayFor(modelItem => com.ApplicationUser.Reputation)
+                                        }
+                                        @if (com.ApplicationUser.Reputation < 100)
+                                        {
+                                            @Html.DisplayFor(modelItem => com.ApplicationUser.Reputation)
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                            @Html.DisplayFor(model => x.Date) <br />
+                            <a href="@Url.Action("Create","Comments",new { answerId = x.Id})">Make a Comment</a>
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+        <br />
+        @*@Html.ActionLink("Make a Comment", "Create", "Comments")*@
+    }
+
+</body>
+<h3>Your Answer</h3>
+@using (Html.BeginForm("Details", "Questions", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.UserId)
+    @Html.TextAreaFor(model => model.Content)
+
+    <div>
+        <script src="https://cdn.tiny.cloud/1/aqou3j2jd2ejescu56qembxc361ht07dve2s1ot1pjfpbpqf/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+        <script>
+            tinymce.init({
+                selector: 'textarea'
+            });
+        </script>
+    </div>
+
+    <br />
+    <input type="submit" value="Add Answer" />
+}
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

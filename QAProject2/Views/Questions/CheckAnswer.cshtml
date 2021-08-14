@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "CheckAnswer";
+}
+
+<h2>CheckAnswer</h2>
+
+@using (Html.BeginForm())
+{
+    <input type="submit" value="This answer is helpful" />
+}
+
+@if (ViewBag.Mark == null)
+{
+
+}
+@if (ViewBag.Mark == false)
+{
+    <p>You can't mark answer that is not yours</p>
+}
+@if (ViewBag.Mark == true)
+{
+    <p>You Mark this answer</p>
+}
+
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

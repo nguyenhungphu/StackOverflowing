@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "DownVote";
+}
+
+<h2>DownVote</h2>
+
+@using (Html.BeginForm())
+{
+    <input type="submit" value="Down Vote" />
+}
+
+@if (ViewBag.Check == null) { }
+@if (ViewBag.Check == false)
+{
+    <p>Down Vote the Answer</p>
+}
+@if (ViewBag.Check == true)
+{
+    <p>You can't vote on your own answer</p>
+}
+
+
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

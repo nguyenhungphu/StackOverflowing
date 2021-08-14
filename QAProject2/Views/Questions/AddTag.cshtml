@@ -1,0 +1,35 @@
+﻿@model QAProject2.Models.Question
+@{
+    ViewBag.Title = "AddTag";
+}
+
+<h2>AddTag</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Tag</h4>
+    <hr />
+    Select the tag you want to add: @Html.DropDownList("TagId")
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+@if(Model != null) { 
+    <ul class="list-unstyled">
+        @foreach(var tag in Model.Tags) 
+        { 
+            <li>@tag.Name</li>
+        }
+    </ul>
+}
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

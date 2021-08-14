@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "UpVote";
+}
+
+<h2>UpVote</h2>
+
+@using (Html.BeginForm())
+{
+    <input type="submit" value="Up Vote" />
+}
+
+
+@if(ViewBag.Check == null) { }
+@if (ViewBag.Check == false)
+{
+    <p>Up Vote the Answer</p>
+}
+@if(ViewBag.Check == true)
+{
+    <p>You can't vote on your own answer</p>
+}
+
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

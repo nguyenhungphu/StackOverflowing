@@ -1,0 +1,72 @@
+﻿@model PagedList.IPagedList<QAProject2.Models.Question>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Questions</h2>
+
+<div>
+    <div class="btn btn-default media-left">
+        @Html.ActionLink("Ask Question", "Create")
+    </div>
+
+    <div class="media-right">
+        <div class="btn btn-default">
+            @Html.ActionLink("Vote", "Index", new { sortOrder = ViewBag.VoteSortParm })
+        </div>
+        <div class="btn btn-default">
+            @Html.ActionLink("Answer", "Index", new { sortOrder = ViewBag.AnswerSortParm })
+        </div>
+    </div>
+
+</div>
+
+<div class="center-block">
+    <div class="col-lg-12">
+        <ul class="list-unstyled">
+            @foreach (var item in Model)
+            {
+                <li class="center-block">
+                    <div class="media">
+                        <div class="media-left text-center">
+                            Vote: @Html.DisplayFor(modelItem => item.Vote) <br />
+                            Answer: @Html.DisplayFor(modelItem => item.Answers.Count) <br />
+
+                        </div>
+                        <div class="media-body">
+                            @Html.ActionLink(item.Title, "Details", new { id = item.Id })
+                            <br />
+                            @Html.Raw(item.Description)
+                            <ul class="row list-unstyled media-body list-inline">
+                                @foreach (var tag in item.Tags) 
+                                {
+                                    <li>@Html.ActionLink(tag.Name,"Index", new { tagId = tag.Id })</li>
+                                }
+                            </ul>
+                            <div class="clearfix visible-xs-block"></div>
+                            <br />
+                        </div>
+                        <div class="media-right">
+                            @Html.DisplayFor(modelItem => item.Date)
+                            @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                            @if (item.ApplicationUser.Reputation >= 100)
+                            {
+                                <i class="glyphicon glyphicon-star" style="color:gold"></i>
+                                @Html.DisplayFor(modelItem => item.ApplicationUser.Reputation)
+                            }
+                            @if (item.ApplicationUser.Reputation < 100)
+                            {
+                                @Html.DisplayFor(modelItem => item.ApplicationUser.Reputation)
+                            }
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

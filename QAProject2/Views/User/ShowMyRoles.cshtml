@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "ShowMyRoles";
+}
+
+<h2>ShowMyRoles</h2>
+
+@using (Html.BeginForm())
+{
+    <div>
+        <ul>
+            @foreach (var e in Model)
+            {
+                <li>
+                    @e
+                </li>
+            }
+        </ul>
+    </div>
+}
